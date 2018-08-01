@@ -16,6 +16,7 @@ find_package(gazebo_dev REQUIRED)
 find_package(gazebo_ros REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 include_directories(include
   ${gazebo_ros_INCLUDE_DIRS}
@@ -45,6 +46,15 @@ ament_target_dependencies(gazebo_ros_template
 )
 ament_export_libraries(gazebo_ros_template)
 
+add_library(gazebo_ros_ray_sensor SHARED
+  src/gazebo_ros_ray_sensor.cpp
+)
+ament_target_dependencies(gazebo_ros_ray_sensor
+  "gazebo_ros"
+  "sensor_msgs"
+)
+ament_export_libraries(gazebo_ros_ray_sensor)
+
 ament_export_include_directories(include)
 ament_export_dependencies(rclcpp)
 ament_export_dependencies(gazebo_dev)
@@ -61,10 +71,10 @@ ament_package()
 install(DIRECTORY include/
         DESTINATION include)
 
-install(
-  TARGETS
+install(TARGETS
     gazebo_ros_force
     gazebo_ros_template
+    gazebo_ros_ray_sensor
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
